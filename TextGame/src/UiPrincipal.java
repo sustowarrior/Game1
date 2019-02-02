@@ -1,34 +1,46 @@
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import java.awt.Dimension;
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.JTextArea;
-import javax.swing.border.LineBorder;
 import java.awt.Color;
-import java.awt.FlowLayout;
-import javax.swing.JButton;
-import javax.swing.JMenu;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class UiPrincipal {
 
 	private JFrame frame;
+	private JScrollPane scrollPane;
+	private JTable tableArea;
+	private JPanel panel_2;
+	private JTextArea textArea;
+	List<Area> listaAreas;
 
-	/**
-	 * Create the application.
-	 */
 	public UiPrincipal() {
-		initialize();
+		carregarConfigs();
+		iniciarLista();
+		
+		frame.setVisible(true);
 	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
+	
+	private void carregarConfigs() {
+		
 		frame = new JFrame();
 		frame.setMinimumSize(new Dimension(800, 600));
 		frame.setBounds(100, 100, 450, 300);
@@ -45,15 +57,16 @@ public class UiPrincipal {
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JPanel panel_2 = new JPanel();
+		panel_2 = new JPanel();
 		panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel.add(panel_2);
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
+		
 		panel_2.add(textArea);
 		textArea.setPreferredSize(new Dimension(700, 400));
-		textArea.setMinimumSize(new Dimension(600, 400));
+		textArea.setMinimumSize(new Dimension(700, 400));
 		textArea.setEditable(false);
 		
 		JPanel panel_1 = new JPanel();
@@ -76,23 +89,106 @@ public class UiPrincipal {
 		panel_5.add(panel_4);
 		panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
 		
-		JButton btnNewButton_2 = new JButton("New button");
-		panel_4.add(btnNewButton_2);
+		JButton btnExplorar = new JButton("Explorar");
+		panel_4.add(btnExplorar);
 		
 		JButton btnNewButton_1 = new JButton("New button");
 		panel_4.add(btnNewButton_1);
 		
 		JButton btnNewButton = new JButton("New button");
 		panel_4.add(btnNewButton);
-		btnNewButton_2.addActionListener(new ActionListener() {
+		btnExplorar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textArea.setText("Testando...");
+				listaAreas = Exploracao.getListArea();
+				textArea.setVisible(false);
+				carregarLista(listaAreas);
 			}
+
 		});
 	}
+	
+	private void iniciarLista() {
 
-	public void setVisible(boolean b) {
-		frame.setVisible(b);
+		listaAreas = new ArrayList<Area>();
+
+		DefaultTableModel model = criarModelArea(listaAreas);
+
+		tableArea = new JTable();
+		tableArea.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2 && !e.isConsumed()) {
+					scrollPane.setVisible(false);
+					textArea.setVisible(true);
+				}
+			}
+		});
+		tableArea.setModel(model);
+		tableArea.setName("Área");
+		tableArea.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		scrollPane = new JScrollPane(tableArea);
+		scrollPane.setPreferredSize(new Dimension(700, 400));
+		scrollPane.setMinimumSize(new Dimension(700, 400));
+		
+		panel_2.add(scrollPane);
+
+		scrollPane.setVisible(false);
+	}
+
+	private void carregarLista(List<Area> listaArea) {
+		
+		DefaultTableModel model = criarModelArea(listaArea);
+		
+		tableArea.setModel(model);
+		
+		tableArea.setName("Área");
+		
+		tableArea.getColumnModel().getColumn(0).setPreferredWidth(120);
+		tableArea.getColumnModel().getColumn(0).setMaxWidth(120);
+		tableArea.getColumnModel().getColumn(0).setMinWidth(120);
+		
+		
+		tableArea.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		tableArea.setVisible(true);
+		scrollPane.setVisible(true);
+		
+	}
+	
+	private DefaultTableModel criarModelArea(List<Area> lista) {
+		@SuppressWarnings("serial")
+		DefaultTableModel model = new DefaultTableModel()
+		{
+			public Class<?> getColumnClass(int column)
+			{
+				switch(column)
+				{
+				case 0:
+					return String.class;
+				case 1:
+					return String.class;
+				default:
+					return String.class;
+				}
+			}
+			
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex)
+			{
+				return false;
+			}
+		};
+
+		model.addColumn("Nome");
+		model.addColumn("Descrição");
+
+		if(lista != null){
+			for (Area area : lista) {
+				model.addRow(new Object[]{area.getNome(), area.getDescricao()});
+			}
+		}
+		return model;
 	}
 
 }
