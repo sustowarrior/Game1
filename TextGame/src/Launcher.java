@@ -1,5 +1,7 @@
 import java.awt.EventQueue;
 
+import javax.swing.UIManager;
+
 public class Launcher {
 	
 	/**
@@ -10,10 +12,9 @@ public class Launcher {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					BinaryUtils.init("Mais um teste");					
-//					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//					Principal window = new Principal();
-//					window.setVisible(true);
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					UiPrincipal window = new UiPrincipal();
+					window.setVisible(true);
 					
 				} catch (Exception e) {
 					e.printStackTrace();

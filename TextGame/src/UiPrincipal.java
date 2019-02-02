@@ -14,14 +14,14 @@ import java.awt.event.ActionEvent;
 import java.awt.Component;
 import javax.swing.Box;
 
-public class Principal {
+public class UiPrincipal {
 
 	private JFrame frame;
 
 	/**
 	 * Create the application.
 	 */
-	public Principal() {
+	public UiPrincipal() {
 		initialize();
 	}
 
