@@ -35,8 +35,6 @@ public class UiPrincipal {
 	public UiPrincipal() {
 		carregarConfigs();
 		iniciarLista();
-		
-		frame.setVisible(true);
 	}
 	
 	private void carregarConfigs() {
@@ -189,6 +187,10 @@ public class UiPrincipal {
 			}
 		}
 		return model;
+	}
+
+	public void setVisible(Boolean b) {
+		frame.setVisible(b);
 	}
 
 }

@@ -14,7 +14,7 @@ public class Launcher {
 				try {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					UiPrincipal window = new UiPrincipal();
-					
+					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
