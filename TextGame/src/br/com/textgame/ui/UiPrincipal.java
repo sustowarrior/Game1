@@ -55,7 +55,7 @@ public class UiPrincipal {
 	public UiPrincipal() {
 		carregarConfigs();
 		iniciarLista();
-		appendToPane(console, "Bem vindo!\nComece explorando uma área.", Color.BLUE);
+		appendToPane(console, "Bem vindo!\nComece explorando uma Area.", Color.BLUE);
 		
 		btnInteragir.setEnabled(false);
 		btnEscapar.setEnabled(false);
@@ -141,7 +141,7 @@ public class UiPrincipal {
 
 				appendToPane(console,"\n" +Combate.jogadorAtaca(vidaMonstro), Color.green.darker().darker());
 				if(vidaMonstro.getVida() <= 0){
-					appendToPane(console,"\n" + "Você matou o monstro! Parabéns!", Color.GREEN.darker().darker().darker());
+					appendToPane(console,"\n" + "Voce matou o monstro! Parabens!", Color.GREEN.darker().darker().darker());
 					btnEscapar.setEnabled(false);
 					btnInteragir.setEnabled(false);
 					btnExplorar.setEnabled(true);
@@ -150,7 +150,7 @@ public class UiPrincipal {
 
 				appendToPane(console, "\n" +Combate.monstroAtaca(jogador), Color.RED);
 				if(jogador.getVida() <= 0){
-					appendToPane(console,"\n" + "Você morreu", Color.RED);
+					appendToPane(console,"\n" + "Voce morreu", Color.RED);
 					btnEscapar.setEnabled(false);
 					btnInteragir.setEnabled(false);
 					return;
@@ -165,7 +165,7 @@ public class UiPrincipal {
 		btnEscapar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				appendToPane(console, "\nVocê escapou...", Color.BLACK);
+				appendToPane(console, "\nVoce escapou...", Color.BLACK);
 				
 				btnEscapar.setEnabled(false);
 				btnInteragir.setEnabled(false);
@@ -203,7 +203,7 @@ public class UiPrincipal {
 
 		});
 		tableArea.setModel(model);
-		tableArea.setName("Área");
+		tableArea.setName("Area");
 		tableArea.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		scrollPane = new JScrollPane(tableArea);
@@ -221,7 +221,7 @@ public class UiPrincipal {
 		
 		tableArea.setModel(model);
 		
-		tableArea.setName("Área");
+		tableArea.setName("Area");
 		
 		tableArea.getColumnModel().getColumn(0).setPreferredWidth(120);
 		tableArea.getColumnModel().getColumn(0).setMaxWidth(120);
@@ -260,7 +260,7 @@ public class UiPrincipal {
 		};
 
 		model.addColumn("Nome");
-		model.addColumn("Descrição");
+		model.addColumn("Descricao");
 
 		if(lista != null){
 			for (Area area : lista) {
