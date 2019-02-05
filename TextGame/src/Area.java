@@ -5,7 +5,6 @@ public class Area {
 	private String descricao;
 
 	public Area(String nome, String descricao) {
-		super();
 		this.nome = nome;
 		this.descricao = descricao;
 	}

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Exploracao {
 
@@ -10,10 +11,15 @@ public class Exploracao {
 		return areas;
 	}
 
-	public static List<Area> getListArea2() {
-		ArrayList<Area> areas = new ArrayList<Area>();
-		areas.add(new Area("TSTE", "AWFFFFAe vida."));
-		return areas;
-	}
+	public static AreaTexto carregarTextExploracao(Area area) {
+		
+		ArrayList<AreaTexto> lista = new ArrayList<AreaTexto>();
+		lista.add(new AreaTexto(""));
+		
+		Random randomGenerator = new Random();
 
+	    int index = randomGenerator.nextInt(lista.size());
+	    AreaTexto item = lista.get(index);
+	    return item;
+	}
 }

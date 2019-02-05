@@ -95,6 +95,7 @@ public class UiPrincipal {
 		
 		JButton btnNewButton = new JButton("New button");
 		panel_4.add(btnNewButton);
+		
 		btnExplorar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				listaAreas = Exploracao.getListArea();
@@ -118,8 +119,11 @@ public class UiPrincipal {
 				if (e.getClickCount() == 2 && !e.isConsumed()) {
 					scrollPane.setVisible(false);
 					textArea.setVisible(true);
+					
+					Exploracao.carregarTextExploracao(listaAreas.get(tableArea.getSelectedRow()));
 				}
 			}
+
 		});
 		tableArea.setModel(model);
 		tableArea.setName("Área");
