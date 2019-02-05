@@ -18,10 +18,10 @@ public class Exploracao {
 	public static AreaContent carregarTextExploracao(Area area) {
 		
 		ArrayList<AreaContent> lista = new ArrayList<AreaContent>();
-		lista.add(new AreaContent(area.getNome()+"\nVocê está explorando a area...\nVoce encontrou um goblin. O que deseja fazer?", 1));
+		lista.add(new AreaContent(area.getNome()+"\nVoce esta explorando a area...\nVoce encontrou um goblin. O que deseja fazer?", 1));
 		
-		lista.add(new AreaContent(area.getNome()+"\nVocê está explorando a area...\n"
-				+ "Voce encontrou uma cabana abandona. Ao adentrar, você não acha nada.\nO que deseja fazer?", 0));
+		lista.add(new AreaContent(area.getNome()+"\nVoce esta� explorando a area...\n"
+				+ "Voce encontrou uma cabana abandona. Ao adentrar, voce nao acha nada.\nO que deseja fazer?", 0));
 		
 		
 		Random randomGenerator = new Random();
