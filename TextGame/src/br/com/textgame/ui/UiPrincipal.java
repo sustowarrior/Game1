@@ -1,3 +1,4 @@
+package br.com.textgame.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -5,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +19,23 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
+
+import br.com.textgame.bss.Combate;
+import br.com.textgame.bss.Exploracao;
+import br.com.textgame.vo.Area;
+import br.com.textgame.vo.AreaContent;
+import br.com.textgame.vo.Jogador;
+import br.com.textgame.vo.Monstro;
 
 public class UiPrincipal {
 
@@ -29,12 +43,22 @@ public class UiPrincipal {
 	private JScrollPane scrollPane;
 	private JTable tableArea;
 	private JPanel panel_2;
-	private JTextArea textArea;
-	List<Area> listaAreas;
+	private JTextPane console;
+	private List<Area> listaAreas;
+	private JButton btnInteragir;
+	private JButton btnEscapar;
+	private JButton btnExplorar;
+	private Jogador jogador = new Jogador(100);
+	private Monstro vidaMonstro = new Monstro(120);
+	private JScrollPane consoleScrollPane;
 
 	public UiPrincipal() {
 		carregarConfigs();
 		iniciarLista();
+		appendToPane(console, "Bem vindo!\nComece explorando uma área.", Color.BLUE);
+		
+		btnInteragir.setEnabled(false);
+		btnEscapar.setEnabled(false);
 	}
 	
 	private void carregarConfigs() {
@@ -60,12 +84,13 @@ public class UiPrincipal {
 		panel.add(panel_2);
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		textArea = new JTextArea();
+		console = new JTextPane();
+		console.setPreferredSize(new Dimension(700, 400));
+		console.setMinimumSize(new Dimension(700, 400));
+		console.setEditable(true);
 		
-		panel_2.add(textArea);
-		textArea.setPreferredSize(new Dimension(700, 400));
-		textArea.setMinimumSize(new Dimension(700, 400));
-		textArea.setEditable(false);
+		consoleScrollPane = new JScrollPane(console);
+		panel_2.add(consoleScrollPane);
 		
 		JPanel panel_1 = new JPanel();
 		frame.getContentPane().add(panel_1, BorderLayout.SOUTH);
@@ -87,20 +112,64 @@ public class UiPrincipal {
 		panel_5.add(panel_4);
 		panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
 		
-		JButton btnExplorar = new JButton("Explorar");
+		btnExplorar = new JButton("Explorar");
 		panel_4.add(btnExplorar);
 		
-		JButton btnNewButton_1 = new JButton("New button");
-		panel_4.add(btnNewButton_1);
+		btnInteragir = new JButton("Atacar");
+		panel_4.add(btnInteragir);
 		
-		JButton btnNewButton = new JButton("New button");
-		panel_4.add(btnNewButton);
+		btnEscapar = new JButton("Escapar");
+		panel_4.add(btnEscapar);
 		
 		btnExplorar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				listaAreas = Exploracao.getListArea();
-				textArea.setVisible(false);
+				consoleScrollPane.setVisible(false);
+				
 				carregarLista(listaAreas);
+				btnExplorar.setEnabled(false);
+				
+				frame.validate();
+				frame.repaint();
+			}
+
+		});
+		
+		btnInteragir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				appendToPane(console,"\n" +Combate.jogadorAtaca(vidaMonstro), Color.green.darker().darker());
+				if(vidaMonstro.getVida() <= 0){
+					appendToPane(console,"\n" + "Você matou o monstro! Parabéns!", Color.GREEN.darker().darker().darker());
+					btnEscapar.setEnabled(false);
+					btnInteragir.setEnabled(false);
+					btnExplorar.setEnabled(true);
+					return;
+				}
+
+				appendToPane(console, "\n" +Combate.monstroAtaca(jogador), Color.RED);
+				if(jogador.getVida() <= 0){
+					appendToPane(console,"\n" + "Você morreu", Color.RED);
+					btnEscapar.setEnabled(false);
+					btnInteragir.setEnabled(false);
+					return;
+				}
+				
+				System.out.println("jogador: "+jogador.getVida());
+				System.out.println("monstro: "+vidaMonstro.getVida());
+			}
+
+		});
+		
+		btnEscapar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				appendToPane(console, "\nVocê escapou...", Color.BLACK);
+				
+				btnEscapar.setEnabled(false);
+				btnInteragir.setEnabled(false);
+				btnExplorar.setEnabled(true);
 			}
 
 		});
@@ -118,9 +187,17 @@ public class UiPrincipal {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2 && !e.isConsumed()) {
 					scrollPane.setVisible(false);
-					textArea.setVisible(true);
+					consoleScrollPane.setVisible(true);
+					AreaContent a = Exploracao.carregarTextExploracao(listaAreas.get(tableArea.getSelectedRow()));
 					
-					Exploracao.carregarTextExploracao(listaAreas.get(tableArea.getSelectedRow()));
+					appendToPane(console, "\n" + a.getDescExploracao(), Color.BLACK);
+					
+					if(a.getEnemyid() > 0){
+						btnInteragir.setEnabled(true);
+						btnEscapar.setEnabled(true);
+					}else{
+						btnExplorar.setEnabled(true);
+					}
 				}
 			}
 
@@ -196,5 +273,22 @@ public class UiPrincipal {
 	public void setVisible(Boolean b) {
 		frame.setVisible(b);
 	}
+	
+	private void appendToPane(JTextPane tp, String msg, Color c) {
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
+
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+
+        StyledDocument doc = tp.getStyledDocument();
+        
+        try {
+			doc.insertString(doc.getLength(), msg,  aset);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
+        
+    }
 
 }

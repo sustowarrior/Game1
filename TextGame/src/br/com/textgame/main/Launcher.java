@@ -1,6 +1,9 @@
+package br.com.textgame.main;
 import java.awt.EventQueue;
 
 import javax.swing.UIManager;
+
+import br.com.textgame.ui.UiPrincipal;
 
 public class Launcher {
 	

@@ -1,3 +1,4 @@
+package br.com.textgame.vo;
 
 public class Area {
 
