@@ -30,4 +30,40 @@ public class Combate {
 		return "Voce foi atacado recebendo um dano total de " + dano;
 	}
 
+	public static Monstro carregaInimigo(int enemyid, int nivel) {
+		
+		Monstro m = new Monstro();
+		int calc = ( 50 + nivel/2);
+		if(enemyid == 1){
+			m.setNome("Goblin");
+			m.setVida(100 + calc);
+			m.setXp(25);
+		}
+		
+		if(enemyid == 2){
+			m.setNome("Troll");
+			m.setVida(200 + calc);
+			m.setXp(70);
+		}
+		
+		if(enemyid == 3){
+			m.setNome("Lich");
+			m.setVida(500 + calc);
+			m.setXp(100);
+		}
+		return m;
+	}
+
+	public static void gainExp(Jogador jogador, Monstro inimigo) {
+		
+		int expAtual = jogador.getProgresso();
+		int expMonstro = inimigo.getXp();
+		int result = expAtual + expMonstro;
+		int proximoNivel = jogador.getNivel() * 100;
+		
+		if(result > proximoNivel)
+			jogador.setNivel(jogador.getNivel() + 1);
+		
+		jogador.setProgresso(result);
+	}
 }

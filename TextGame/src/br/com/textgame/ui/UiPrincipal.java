@@ -48,8 +48,8 @@ public class UiPrincipal {
 	private JButton btnInteragir;
 	private JButton btnEscapar;
 	private JButton btnExplorar;
-	private Jogador jogador = new Jogador(100);
-	private Monstro vidaMonstro = new Monstro(120);
+	private Jogador jogador = new Jogador(100, 1, 0);
+	private Monstro inimigo = null;
 	private JScrollPane consoleScrollPane;
 
 	public UiPrincipal() {
@@ -139,9 +139,10 @@ public class UiPrincipal {
 		btnInteragir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				appendToPane(console,"\n" +Combate.jogadorAtaca(vidaMonstro), Color.green.darker().darker());
-				if(vidaMonstro.getVida() <= 0){
-					appendToPane(console,"\n" + "Voce matou o monstro! Parabens!", Color.GREEN.darker().darker().darker());
+				appendToPane(console,"\n" +Combate.jogadorAtaca(inimigo), Color.green.darker().darker());
+				if(inimigo.getVida() <= 0){
+					appendToPane(console,"\n" + "Voce matou o "+inimigo.getNome()+"! Parabens!", Color.GREEN.darker().darker().darker());
+					Combate.gainExp(jogador, inimigo);
 					btnEscapar.setEnabled(false);
 					btnInteragir.setEnabled(false);
 					btnExplorar.setEnabled(true);
@@ -156,8 +157,6 @@ public class UiPrincipal {
 					return;
 				}
 				
-				System.out.println("jogador: "+jogador.getVida());
-				System.out.println("monstro: "+vidaMonstro.getVida());
 			}
 
 		});
@@ -193,6 +192,7 @@ public class UiPrincipal {
 					appendToPane(console, "\n" + a.getDescExploracao(), Color.BLACK);
 					
 					if(a.getEnemyid() > 0){
+						inimigo = Combate.carregaInimigo(a.getEnemyid(), jogador.getNivel());
 						btnInteragir.setEnabled(true);
 						btnEscapar.setEnabled(true);
 					}else{

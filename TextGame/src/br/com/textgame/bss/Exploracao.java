@@ -20,7 +20,11 @@ public class Exploracao {
 		ArrayList<AreaContent> lista = new ArrayList<AreaContent>();
 		lista.add(new AreaContent(area.getNome()+"\nVoce esta explorando a area...\nVoce encontrou um goblin. O que deseja fazer?", 1));
 		
-		lista.add(new AreaContent(area.getNome()+"\nVoce esta¡ explorando a area...\n"
+		lista.add(new AreaContent(area.getNome()+"\nVoce esta explorando a area...\nVoce encontrou um troll. O que deseja fazer?", 2));
+		
+		lista.add(new AreaContent(area.getNome()+"\nVoce esta explorando a area...\nVoce encontrou um lich. O que deseja fazer?", 3));
+		
+		lista.add(new AreaContent(area.getNome()+"\nVoce esta explorando a area...\n"
 				+ "Voce encontrou uma cabana abandona. Ao adentrar, voce nao acha nada.\nO que deseja fazer?", 0));
 		
 		
