@@ -7,9 +7,9 @@ import br.com.textgame.vo.Monstro;
 
 public class Combate {
 
-	public static String jogadorAtaca(Monstro monstro) {
+	public static String jogadorAtaca(Monstro monstro, Jogador jogador) {
 		
-		int forca = 50;
+		int forca = 50 + (100 + (jogador.getNivel() * 2)/3);
 		int dano = getDano(forca);
 		monstro.setVida(monstro.getVida() - dano);
 		return "Voce atacou causando um dano total de " + dano;
@@ -22,9 +22,9 @@ public class Combate {
 		return dano;
 	}
 
-	public static String monstroAtaca(Jogador jogador) {
+	public static String monstroAtaca(Jogador jogador, Monstro m) {
 		
-		int forca = 25;
+		int forca = 25 + (((m.getXp() * 4) / 3)) + (jogador.getNivel() * 6);
 		int dano = getDano(forca);
 		jogador.setVida(jogador.getVida() - dano);
 		return "Voce foi atacado recebendo um dano total de " + dano;
@@ -61,7 +61,7 @@ public class Combate {
 		int result = expAtual + expMonstro;
 		int proximoNivel = jogador.getNivel() * 100;
 		
-		if(result > proximoNivel)
+		if(result >= proximoNivel)
 			jogador.setNivel(jogador.getNivel() + 1);
 		
 		jogador.setProgresso(result);

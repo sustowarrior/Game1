@@ -25,6 +25,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -139,17 +140,24 @@ public class UiPrincipal {
 		btnInteragir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				appendToPane(console,"\n" +Combate.jogadorAtaca(inimigo), Color.green.darker().darker());
+				appendToPane(console,"\n" +Combate.jogadorAtaca(inimigo, jogador), Color.green.darker().darker());
 				if(inimigo.getVida() <= 0){
 					appendToPane(console,"\n" + "Voce matou o "+inimigo.getNome()+"! Parabens!", Color.GREEN.darker().darker().darker());
 					Combate.gainExp(jogador, inimigo);
+					appendToPane(console,"\n" + "Voce esta no nivel "+jogador.getNivel()+"!", Color.GREEN.darker().darker().darker());
+					appendToPane(console,"\n" + "Sua vida foi recuperada!", Color.GREEN.darker().darker().darker());
+					jogador.setVida(100*jogador.getNivel());
+					
+					System.out.println("nivel: "+jogador.getNivel());
+					System.out.println("progresso: "+jogador.getProgresso());
+					
 					btnEscapar.setEnabled(false);
 					btnInteragir.setEnabled(false);
 					btnExplorar.setEnabled(true);
 					return;
 				}
 
-				appendToPane(console, "\n" +Combate.monstroAtaca(jogador), Color.RED);
+				appendToPane(console, "\n" +Combate.monstroAtaca(jogador, inimigo), Color.RED);
 				if(jogador.getVida() <= 0){
 					appendToPane(console,"\n" + "Voce morreu", Color.RED);
 					btnEscapar.setEnabled(false);
@@ -285,6 +293,12 @@ public class UiPrincipal {
         
         try {
 			doc.insertString(doc.getLength(), msg,  aset);
+			
+			tp.setCaretPosition(tp.getDocument().getLength());
+			
+			DefaultCaret caret = (DefaultCaret)tp.getCaret();
+			caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+			
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
